@@ -12,6 +12,7 @@ game 'gta5'
 author 'ShadowCodding'
 description 'Boutique for FiveM'
 version '1.0.0'
+lua54 'yes'
 
 shared_script {
     'shared/*.lua'
@@ -24,6 +25,12 @@ client_scripts {
 server_scripts {
     '@mysql-async/lib/MySQL.lua',
     'server/*.lua'
+}
+
+escrow_ignore {
+    "shared/*.lua",
+    "client/*.lua",
+    "server/*.lua",
 }
 
 dependency 'zUI'
