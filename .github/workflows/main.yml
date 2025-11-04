@@ -1,0 +1,24 @@
+name: Pull Request Logs
+
+on:
+  pull_request:
+    types: [opened, reopened, closed, merged]
+
+jobs:
+  send_log_to_discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send PR info to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          if [ "${{ github.event.action }}" = "closed" ] && [ "${{ github.event.pull_request.merged }}" = "true" ]; then
+            ACTION="merged"
+          else
+            ACTION="${{ github.event.action }}"
+          fi
+
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d "{\"content\": \"🔔 Pull Request **#${{ github.event.pull_request.number }}** *${ACTION}* by **${{ github.event.pull_request.user.login }}**\n> [${{ github.event.pull_request.title }}](${{ github.event.pull_request.html_url }})\"}" \
+          $DISCORD_WEBHOOK
