@@ -55,9 +55,23 @@ zUI.SetItems(main_menu, function()
                     end
                 end)
             elseif (key == _("category_vehicles")) then
-                item.button = zUI.Button(item.vehicleLabel, nil, {
+                item.button = zUI.Button(item.vehicleLabel, _(item.credit > myCredits and "desc_button_enought" or "desc_button_no_enought", item.credit > myCredits and item.credit - myCredits or myCredits - item.credit), {
                     RightLabel = ("~r~%s %s"):format(item.credit, _("credits"))
                 }, function(onSelected)
+                    if (onSelected) then
+                        zUI.ManageFocus(false)
+                        local confirm = input_showBox(_("buy_confirm", item.vehicleLabel, item.credit), "", 4, false)
+                        if (not (confirm)) then
+                            zUI.ManageFocus(true)
+                            return
+                        end
+                        if (confirm:lower() == "oui" or confirm:lower() == "yes") then
+                            TriggerServerEvent("boutique:purchase", key, item.vehicleModel)
+                        else
+                            config.notify(_("purchase_cancelled"))
+                        end
+                        zUI.ManageFocus(true)
+                    end
                 end)
 
             end
