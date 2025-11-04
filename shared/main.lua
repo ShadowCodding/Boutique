@@ -7,7 +7,7 @@
 -- Discord     : https://discord.com/s-dev
 -- ============================================================================
 
-
+-- test pull request
 local config = {}
 
 config.locale = 'fr'
